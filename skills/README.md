@@ -84,7 +84,7 @@ Every tool named in a skill is an MCP tool. A client that surfaces MCP tools cal
 
 ## Installing
 
-The skills live in the `skills/` folder of [space-skills](https://github.com/Hugo-SEQUIER/space-skills). In Cursor, the plugin at the root of that repository installs all of them, together with the Space MCP connection and a memory rule; its README explains how.
+The skills live in the `skills/` folder of [space-skills](https://github.com/Hugo-SEQUIER/space-skills). In Cursor and Claude, the plugin at the root of that repository installs all of them together with the Space MCP connection, plus a memory rule in Cursor; its README explains how.
 
 In other clients, use the client's skill installer or configured skill directory, and copy only the folders the user wants. Each should end up as `<skills directory>/<skill-name>/SKILL.md`. Configure and authorize the Space MCP connection separately; a skill file does not establish a connection or grant access.
 
