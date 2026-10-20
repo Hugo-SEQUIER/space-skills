@@ -5,7 +5,7 @@ description: Create and maintain a custom database in Space, including its field
 
 # Custom databases
 
-A database is a workspace item that holds a typed schema and its records, versioned as one snapshot. Read and change records with `query_database`, which runs SQL on one table and saves a change as a new revision. Change the schema (fields, view, grouping, name, description) by saving the whole snapshot with `save_workspace_item`. This skill does not write documents, tasks or memory.
+A database is a workspace item that holds a typed schema and its records, versioned as one snapshot. Read records with `read_database` and change them with `query_database`. Both run SQL on one table, and a change is saved as a new revision. Change the schema (fields, view, grouping, name, description) by saving the whole snapshot with `save_workspace_item`. This skill does not write documents, tasks or memory.
 
 ## Before you start
 
@@ -19,10 +19,10 @@ List the Space's databases with `list_workspace_items(kind="database")`, followi
 
 ## Read and change records with SQL
 
-`query_database(space_id, database_id, request)` exposes one table named `records`. Its columns are `id`, `name`, `notes`, `created_at`, `updated_at` and one column per field, named after the field. Quote a name that is not a plain identifier, such as `"Next step"`. A field whose name collides with a built-in column, such as a field called `name`, appears as `field_name`. Pass `include_schema=true` to get the exact column map.
+`read_database(space_id, database_id, request)` and `query_database(space_id, database_id, request)` expose one table named `records`. Its columns are `id`, `name`, `notes`, `created_at`, `updated_at` and one column per field, named after the field. Quote a name that is not a plain identifier, such as `"Next step"`. A field whose name collides with a built-in column, such as a field called `name`, appears as `field_name`. Pass `include_schema=true` to get the exact column map.
 
-- Read with `SELECT`, binding values to `?` placeholders through `params` rather than building SQL strings. Results are capped by `max_rows` (default 100, up to 500) and 20,000 characters; narrow the query or add `LIMIT`/`OFFSET` when a result says `truncated`.
-- Write with `INSERT`, `UPDATE` or `DELETE`, passing a new `command_id` and the database's current `revision` as `expected_revision`. Omit `id` on `INSERT` to have one assigned; `INSERT ... RETURNING id` reports it. `id`, `created_at` and `updated_at` cannot be updated; Space sets the timestamps.
+- Read with `SELECT` through `read_database`, binding values to `?` placeholders through `params` rather than building SQL strings. It never changes the database. Results are capped by `max_rows` (default 100, up to 500) and 20,000 characters; narrow the query or add `LIMIT`/`OFFSET` when a result says `truncated`.
+- Write with `INSERT`, `UPDATE` or `DELETE` through `query_database`, passing a new `command_id` and the database's current `revision` as `expected_revision`. It refuses a request with no `INSERT`, `UPDATE` or `DELETE`. Omit `id` on `INSERT` to have one assigned; `INSERT ... RETURNING id` reports it. `id`, `created_at` and `updated_at` cannot be updated; Space sets the timestamps.
 - Use `statements` for a small related change, up to 20 statements that run in order, see each other's changes, and succeed or fail together as one revision.
 - Checkbox columns hold `0` or `1`. Select columns accept only the field's options. The whole resulting snapshot is validated before it is saved, so a rejected change saves nothing.
 
@@ -55,7 +55,7 @@ Adding a field is a schema change: it alters every record's shape, so make it wh
 
 ## Records in a snapshot
 
-Prefer `query_database` for records. When a snapshot save must include records, such as a bulk import, a record has a stable `id`, a `name`, an optional `notes` string and a `values` object keyed by field ID. Record IDs must be distinct, and a value key that is not a field ID is rejected.
+Prefer `read_database` and `query_database` for records. When a snapshot save must include records, such as a bulk import, a record has a stable `id`, a `name`, an optional `notes` string and a `values` object keyed by field ID. Record IDs must be distinct, and a value key that is not a field ID is rejected.
 
 Leave a value out, or set it to null, when the user has no value for it. An empty string is accepted and stored verbatim for every string field, and it skips the checks that apply to a non-empty value, so an empty `select`, `date`, `url` or `email` value is stored without being validated. Only `number` and `checkbox` reject an empty string. `updatedAt` is required and must be an ISO 8601 timestamp, so set it when the record's content changes and not when the snapshot is merely re-saved.
 
@@ -67,7 +67,7 @@ Log records the user asked for. Do not invent values, dates or contact details t
 
 ## Task databases
 
-A database with a `tasks` setting is a task list: its open rows can be planned for a day and appear in the user's Today view under Tasks. `tasks.status` is the ID of a select field, `tasks.done` lists the options of that field that close a row, and `tasks.planned` is the ID of a date field holding the day a row is planned for. `get_space_map` shows the setting with field names instead of IDs, so you can query the rows directly.
+A database with a `tasks` setting is a task list: its open rows can be planned for a day and appear in the user's Today view under Tasks. `tasks.status` is the ID of a select field, `tasks.done` lists the options of that field that close a row, and `tasks.planned` is the ID of a date field holding the day a row is planned for. `get_space_map` shows the setting with field names instead of IDs, so you can select the rows directly with `read_database`.
 
 - To plan a row for a day, set its planned field to that date with `query_database`. To take it off the plan, set the field to null. To close it, set the status to one of the `done` options.
 - To find the user's work for a day, select the rows whose planned field is on or before that day and whose status is not a done option, across every task database in the map.
@@ -110,7 +110,9 @@ Each record: `id` (string, 1-100), `name` (string, 1-200), `notes` (string, up t
 
 The whole snapshot must stay within 900 KiB.
 
-`query_database(space_id, database_id, request)`: `request` holds either `sql` with `params`, or `statements` (a list of `{sql, params}`, up to 20). Writes add `command_id` and `expected_revision`. Optional `max_rows` (1-500) and `include_schema`. The result has `results` (one `{columns, rows, row_count, truncated}` per statement), `database.revision` and `changes` (`inserted`, `updated`, `deleted`, or null when nothing changed).
+`read_database(space_id, database_id, request)`: `request` holds either `sql` with `params`, or `statements` (a list of `{sql, params}`, up to 20), and optional `max_rows` (1-500) and `include_schema`. The result has `results` (one `{columns, rows, row_count, truncated}` per statement) and `database.revision`.
+
+`query_database(space_id, database_id, request)`: the same `request` plus the required `command_id` and `expected_revision`, with at least one `INSERT`, `UPDATE` or `DELETE`. The result adds `changes` (`inserted`, `updated`, `deleted`, or null when nothing changed).
 
 `get_workspace_item(space_id, item_id, revision)` returns the stored snapshot, which is the input to the next schema save. `list_workspace_items(space_id, kind="database", after, deleted)` returns at most 25 databases per page, with `record_count` and no records. `set_workspace_item_deleted` archives or restores the database with its history; an archived database refuses SQL writes until restored.
 
@@ -125,4 +127,4 @@ The whole snapshot must stay within 900 KiB.
 
 ## Failures and retries
 
-Reuse the same `command_id` and payload after an uncertain write; a changed payload needs a fresh command ID. A retried `query_database` write returns the committed revision with `replayed: true` and no rows; run a `SELECT` to see the result. On a revision conflict, read the current item and rebuild the snapshot from it. A rejected value names the rule it broke, such as an unknown select option or an unknown field key: report it and ask rather than dropping the value silently.
+Reuse the same `command_id` and payload after an uncertain write; a changed payload needs a fresh command ID. A retried `query_database` write returns the committed revision with `replayed: true` and no rows; read the rows with `read_database` to see the result. On a revision conflict, read the current item and rebuild the snapshot from it. A rejected value names the rule it broke, such as an unknown select option or an unknown field key: report it and ask rather than dropping the value silently.
