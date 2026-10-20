@@ -9,6 +9,7 @@
   },
   "homepage": "https://getspace.sh",
   "repository": "https://github.com/Hugo-SEQUIER/space-skills",
+  "license": "MIT",
   "keywords": ["memory", "mcp", "knowledge", "tasks", "documents", "databases", "agents"],
   "logo": "assets/logo.svg"
 }

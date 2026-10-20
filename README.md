@@ -33,3 +33,7 @@ Each folder under `skills/` is a standard skill (`SKILL.md`) that works on its o
 ## Privacy and support
 
 Space stores only what you or your agents save, never imports your chat history, and encrypts documents, tasks, records and memory text before storing them. See the [privacy policy](https://getspace.sh/privacy). For help, write to support@getspace.sh.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
