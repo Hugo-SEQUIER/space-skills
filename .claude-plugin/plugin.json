@@ -1,0 +1,15 @@
+{
+  "name": "getspace",
+  "displayName": "Space",
+  "version": "1.0.0",
+  "description": "One memory for every AI agent you use. Recall earlier decisions, save memories, and keep documents, tasks and databases in Space, shared with your other agents.",
+  "author": {
+    "name": "Space",
+    "email": "support@getspace.sh",
+    "url": "https://getspace.sh"
+  },
+  "homepage": "https://getspace.sh",
+  "repository": "https://github.com/Hugo-SEQUIER/space-skills",
+  "license": "MIT",
+  "keywords": ["memory", "mcp", "knowledge", "tasks", "documents", "databases", "agents"]
+}

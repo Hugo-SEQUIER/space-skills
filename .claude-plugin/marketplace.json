@@ -1,0 +1,15 @@
+{
+  "name": "getspace",
+  "description": "The Space plugin: one memory for every AI agent you use.",
+  "owner": {
+    "name": "Space",
+    "email": "support@getspace.sh"
+  },
+  "plugins": [
+    {
+      "name": "getspace",
+      "source": "./",
+      "description": "One memory for every AI agent you use. Recall earlier decisions, save memories, and keep documents, tasks and databases in Space, shared with your other agents."
+    }
+  ]
+}

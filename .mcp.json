@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "space": {
+      "type": "http",
+      "url": "https://api.getspace.sh/mcp/"
+    }
+  }
+}
