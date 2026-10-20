@@ -9,6 +9,7 @@
     "url": "https://getspace.sh"
   },
   "homepage": "https://getspace.sh",
+  "privacyPolicyUrl": "https://getspace.sh/privacy",
   "repository": "https://github.com/Hugo-SEQUIER/space-skills",
   "license": "MIT",
   "keywords": ["memory", "mcp", "knowledge", "tasks", "documents", "databases", "agents"]
