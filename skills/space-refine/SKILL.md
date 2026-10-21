@@ -48,8 +48,8 @@ Before writing claims, search the relevant topics with `get_context` using `requ
 
 - Skip an equivalent supported claim that is already stored. Repeating a refinement must not create another copy.
 - Keep new evidence or changed circumstances distinct from a contradiction. A dated decision may remain valid as history.
-- Apply an explicit correction to the identified current claim only within the user's request or the established correction policy. Reread first, then use `change_memory` with its `resource_id`, `expected_revision`, `entry_id`, `action="edit"`, the replacement `value` and a fresh `command_id`.
-- `change_memory` retains the existing source reference. If a correction needs a new source, keep the attribution in the value or save a separately sourced replacement under the connected policy. Do not claim the old source was updated, and do not silently delete another claim to resolve uncertain provenance.
+- Apply an explicit correction to the identified current claim only within the user's request or the established correction policy. Reread first, then use `edit_memory_claim` with its `resource_id`, `expected_revision`, `entry_id`, the replacement `value` and a fresh `command_id`.
+- `edit_memory_claim` retains the existing source reference. If a correction needs a new source, keep the attribution in the value or save a separately sourced replacement under the connected policy. Do not claim the old source was updated, and do not silently delete another claim to resolve uncertain provenance.
 - Leave unresolved contradictions in the handoff and report them. Do not promote a guessed resolution into memory.
 
 ## Save the summary, then the claims
