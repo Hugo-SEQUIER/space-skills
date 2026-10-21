@@ -1,7 +1,7 @@
 {
   "name": "getspace",
   "displayName": "Space",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "One memory for every AI agent you use. Recall earlier decisions, save memories, and keep documents, tasks and databases in Space, shared with your other agents.",
   "author": {
     "name": "Space",
