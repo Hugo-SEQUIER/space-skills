@@ -28,7 +28,7 @@ Prefer updating a matching claim over adding a duplicate when the user's request
 | Already-separated claims with an index and an exact value | `remember_claims` |
 | Conversation text or an existing saved source to mine into separate claims | `extract_memory` |
 | Session progress, blockers and next actions | `save_handoff` |
-| An explicit edit, reclassification or deletion of a current claim | `change_memory` |
+| An explicit edit, reclassification or deletion of a current claim | `edit_memory_claim`, `classify_memory_claim` or `forget_memory_claim` |
 | A source to extract on a server that exposes only synchronous extraction | `build_memory` |
 
 `remember` and `remember_claims` save authored wording verbatim: organization when the classifier is configured, then embedding, encryption and storage, with no text generation. Use `extract_memory` only when material must be mined into separate claims, because it spends provider calls and returns a durable job.
@@ -64,10 +64,10 @@ Poll at spaced, bounded intervals and stop with the current status when processi
 
 Read the current entry IDs and values first.
 
-- An edit uses `change_memory` with `action="edit"` and the replacement `value`.
-- A forget uses `action="forget"` and omits `value`. It removes the claim from the index immediately and is not a reversible exclusion or a promise to erase historical resource revisions.
+- An edit uses `edit_memory_claim` with the replacement `value`.
+- A forget uses `forget_memory_claim`, which takes no `value`. It removes the claim from the index immediately and is not a reversible exclusion or a promise to erase historical resource revisions.
 - A whole record uses `delete_memory` with the record's `resource_id` and its current revision. Use it when the memory should be gone rather than corrected, including the empty record that forgetting every claim leaves behind.
-- A reclassification uses `action="classify"` with `classification`, which pins manual category, project and section assignments. Manual assignments survive later edits and rebuilds. A classify with no `classification` replaces the assignments using the configured organizer; when no organizer is configured the write is rejected, and when the organizer cannot answer, the existing assignments are kept and the write fails as temporarily unavailable.
+- A reclassification uses `classify_memory_claim` with `classification`, which pins manual category, project and section assignments. Manual assignments survive later edits and rebuilds. A `classify_memory_claim` call with no `classification` replaces the assignments using the configured organizer; when no organizer is configured the write is rejected, and when the organizer cannot answer, the existing assignments are kept and the write fails as temporarily unavailable.
 
 Where the served workflow calls for saving a replacement and removing the erroneous claim, save the replacement successfully before deleting the old claim, and never keep both when the user corrected you. These are separate operations: if removal fails, report that both remain and give their references. Do not present a partial correction as complete, and preserve valid information outside the requested correction.
 
@@ -106,7 +106,7 @@ Every tool below is an MCP tool. A client that surfaces MCP tools calls them as 
 
 Each claim takes `index` (string, 1-300, unique in the request, without `||`), `value` (string, 1-2000), `memory_type` (`factual` or `procedural`) and `importance` (0-3). The `index` labels a claim inside one request; it is not a global upsert key.
 
-`change_memory(space_id, change)`:
+`edit_memory_claim(space_id, change)`, `forget_memory_claim(space_id, change)` and `classify_memory_claim(space_id, change)` share four fields:
 
 | Field | Type | Notes |
 |---|---|---|
@@ -114,9 +114,8 @@ Each claim takes `index` (string, 1-300, unique in the request, without `||`), `
 | `resource_id` | UUID | The memory resource holding the claim |
 | `expected_revision` | int >= 1 | The revision just read |
 | `entry_id` | UUID | The claim to change |
-| `action` | `edit`, `forget` or `classify` | See above |
-| `value` | string, 1-2000 | Required for `edit`, omitted for `forget` |
-| `classification` | object, optional | Accepted only with `action="classify"`; `scope` (`global`, `project` or `unassigned`), `category_ids`, `project_ids`, `section_ids` |
+
+`edit_memory_claim` adds `value` (string, 1-2000), the replacement text. `forget_memory_claim` adds nothing. `classify_memory_claim` adds an optional `classification`: `scope` (`global`, `project` or `unassigned`), `category_ids`, `project_ids` and `section_ids`.
 
 Project scope requires at least one `project_ids` entry; `global` and `unassigned` must have none. Assignments must be unique.
 
