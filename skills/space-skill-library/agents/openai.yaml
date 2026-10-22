@@ -1,0 +1,4 @@
+interface:
+  display_name: "Space Skill Library"
+  short_description: "List, use, save and install a Space's skills"
+  default_prompt: "Use $space-skill-library to list, apply, save or install the skills in my Space."
