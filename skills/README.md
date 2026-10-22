@@ -131,7 +131,7 @@ Run the skill-creator validator for new or changed skills. Schema and prose chec
 | Update a project without reading it first | The stale revision is refused and the current project is read before the retry |
 | Archive a project, then save it again | The save is reported as a restore, and the project is not described as deleted |
 | Add a record to a database and keep the field IDs | Existing fields and records keep their IDs and their values stay attached |
-| Create a board that groups by a text field | The write is rejected with the grouping rule and the snapshot is not described as saved |
+| Create a board that groups by a text field | The write is rejected with the grouping rule and the save is not described as saved |
 | Search for a string that appears only inside a database row | The database is returned as a hit, and the row is read before it is quoted |
 | Search while the Space changes mid-page | The continuation is refused, a fresh pass is run, and the result is labelled partial |
 | Ask where a record is, then ask what the evidence means | The first answer names the record and its ID; the second cites revisions from ranked recall |
