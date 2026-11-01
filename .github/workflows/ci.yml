@@ -1,0 +1,39 @@
+name: CI
+
+# Runs on Hugo's self-hosted runner (spaceskills-host-1). Pull requests from
+# forks go to GitHub's free hosted runner instead, never to the server.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ${{ github.event.pull_request.head.repo.fork && 'ubuntu-24.04' || fromJSON('["self-hosted","spaceskills"]') }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      # The repo is markdown plus plugin manifests: check the manifests parse.
+      - name: Validate plugin and MCP manifests (JSON)
+        run: |
+          for f in .claude-plugin/marketplace.json .claude-plugin/plugin.json \
+                   .cursor-plugin/plugin.json mcp.json .mcp.json; do
+            python3 -m json.tool "$f" > /dev/null
+            echo "ok $f"
+          done
+
+  # Shared gitleaks + osv-scanner job from Hugo-SEQUIER/ci-workflows.
+  security:
+    uses: Hugo-SEQUIER/ci-workflows/.github/workflows/security.yml@v1
+    with:
+      runs-on: ${{ github.event.pull_request.head.repo.fork && '["ubuntu-24.04"]' || '["self-hosted","spaceskills"]' }}
