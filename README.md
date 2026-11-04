@@ -7,7 +7,7 @@ This repository is the Space plugin for Cursor and Claude, and the source of the
 | Part | File | What it does |
 |---|---|---|
 | Space MCP server | [`mcp.json`](mcp.json) for Cursor, [`.mcp.json`](.mcp.json) for Claude | Connects the agent to `https://api.getspace.sh/mcp/`, with Space's own sign-in |
-| Skills | [`skills/`](skills/README.md) | Seventeen workflows: recall what was decided, remember a lesson, brief a project, track tasks, keep a database, review a day or a week, and more |
+| Skills | [`skills/`](skills/README.md) | Nineteen workflows: recall what was decided, remember a fact, run a recurring system and its lab of lessons, brief a project, track tasks, keep a database, review a day or a week, and more |
 | Memory rule, in Cursor | [`rules/space-memory.mdc`](rules/space-memory.mdc) | Asks the agent to use Space as shared memory: retrieve context before project work, save confirmed decisions, and never store secrets. In Claude, the Space server's own instructions say the same. |
 
 The plugin runs no code on your computer. It holds instructions and the address of Space's MCP server, and everything the agent reads or saves in Space goes through that server, after you sign in.

@@ -27,6 +27,7 @@ Optional workflows for a connected agent: recover context, preserve useful knowl
 | [space-tasks](space-tasks/SKILL.md) | "Save this idea as a task" | Preserve the original request, purpose, scope and completion criteria; find or update the canonical task |
 | [space-journal](space-journal/SKILL.md) | "Record today" or "what did we do yesterday?" | Dated daily records and recaps, using the user's timezone and supported event dates |
 | [space-weekly-review](space-weekly-review/SKILL.md) | "What moved forward last week?" | Outcomes, carryover, decisions, lessons and proposed priorities over an explicit week |
+| [space-systems](space-systems/SKILL.md) | "What works for cold email?", "log this lesson" or "review the X system" | Apply a system's verdicts before recurring work and record their use, add hypotheses and lessons to its lab, review the system at its cadence, and promote or demote entries only on evidence |
 | [space-morning](space-morning/SKILL.md) | "Morning" or "what should I do today?" | Read-only start-of-day brief: changes since the last morning or journal, rows planned for today, and at most five proposed items; changes nothing without approval |
 
 ## Maintenance

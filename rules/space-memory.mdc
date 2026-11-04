@@ -10,6 +10,7 @@ Use Space as shared memory across sessions.
 - Before project work, retrieve relevant context, decisions, and open tasks.
 - Search before saving to avoid duplicates.
 - Save confirmed decisions, useful discoveries, and durable preferences.
+- Before recurring work, read the verdicts of its system (`list_verdicts`) and record each one you apply. Put untested ideas and unmeasured lessons in the system's lab, not in memory.
 - Track actionable work as tasks, with clear completion criteria.
 - When finishing substantial work, record outcomes, blockers, and next steps.
 - Update outdated information rather than creating conflicting records.

@@ -30,6 +30,7 @@ Prefer updating a matching claim over adding a duplicate when the user's request
 | Session progress, blockers and next actions | `save_handoff` |
 | An explicit edit, reclassification or deletion of a current claim | `edit_memory_claim`, `classify_memory_claim` or `forget_memory_claim` |
 | A source to extract on a server that exposes only synchronous extraction | `build_memory` |
+| A hypothesis, an untested idea or a lesson still being measured, about work a system covers | `add_lab_entry` in that system's lab (the `space-systems` skill); it becomes recallable only once promoted to a verdict |
 
 `remember` and `remember_claims` save authored wording verbatim: organization when the classifier is configured, then embedding, encryption and storage, with no text generation. Use `extract_memory` only when material must be mined into separate claims, because it spends provider calls and returns a durable job.
 
@@ -42,7 +43,7 @@ Keep each claim focused enough to correct independently. Include the details tha
 - When the lesson applies and its known exceptions.
 - For a decision, any agreed condition for revisiting it.
 
-Include only conditions and reasons established by the evidence or the user. A one-time result is not a universal rule. Attribute opinions and uncertain explanations, preserve exceptions, and keep proposals separate from adopted decisions. Temporary progress belongs in a task, a handoff or a journal; a recurring failure's supported lesson may deserve memory.
+Include only conditions and reasons established by the evidence or the user. A one-time result is not a universal rule. Attribute opinions and uncertain explanations, preserve exceptions, and keep proposals separate from adopted decisions. Temporary progress belongs in a task, a handoff or a journal; a recurring failure's supported lesson may deserve memory. When the Space has systems (`list_systems`), a lesson about recurring work goes to that system's lab instead, because recall treats memory as established while a lab entry stays an idea until promoted.
 
 There are no dedicated fields for reuse conditions, exceptions or revisit conditions. Express them concisely in the claim's `value` and do not invent metadata. Claims in one request share one `source`, so use separate requests for claims that need different source references.
 
