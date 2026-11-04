@@ -34,7 +34,7 @@ Build a capture with:
 - Remaining work, blockers, open questions and agreed next actions.
 - Candidate reusable facts or lessons, each with its origin and scope.
 
-Select claims that could change what a future agent does: explicit lasting preferences, project constraints, adopted decisions, and a demonstrated lesson with its conditions. Keep temporary status, one-off errors, unfinished ideas and next steps in the handoff. Include no credentials, excluded material, unnecessary personal details or unsupported inferences. Keep dates for facts that change, and separate the date of an event from the date of capture.
+Select claims that could change what a future agent does: explicit lasting preferences, project constraints, adopted decisions, and a demonstrated lesson with its conditions. Keep temporary status, one-off errors, unfinished ideas and next steps in the handoff. When the Space has systems (`list_systems`), propose a candidate lesson about recurring work as a lab entry of its system, with its evidence level and source (the `space-systems` skill), rather than as a memory claim; only a promoted verdict is recalled. Include no credentials, excluded material, unnecessary personal details or unsupported inferences. Keep dates for facts that change, and separate the date of an event from the date of capture.
 
 Worked examples of the distinction:
 
